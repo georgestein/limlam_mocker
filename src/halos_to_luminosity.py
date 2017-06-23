@@ -55,9 +55,16 @@ def Mhalo_to_Lco_Padmanabhan(halos, scatter):
     following the Padmanabhan 2017 model
     arXiv 1706.01471
     """
-
-
-    return Lco
+    m10,m11,n10,n11,b10,b11,y10,y11 = 4.17e12,-1.17,0.0033,0.04,0.95,0.48,0.66,-0.33
+    z = halos.redshift
+    hm = halos.M
+    m1 = 10**(np.log10(m10)+m11*z/(z+1));
+    n = n10+n11*z/(z+1);
+    b = b10+b11*z/(z+1);
+    y = y10+y11*z/(z+1);
+    Lprime = 2*n*hm/((hm/m1)**(-b)+(hm/m1)**y);
+    L = Lprime#*4.9e-5*(rest_freq/CO_REST_FREQ)**3;
+    return L.flatten()
 
 def get_sfr_table():
     """
