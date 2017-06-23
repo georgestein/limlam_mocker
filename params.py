@@ -2,7 +2,7 @@
 # and map parameters
 
 ### Lco(M, z, ...) model
-model   = 'Padmanabhan' #'Li'
+model   = 'Li' #'Padmanabhan'
 scatter = True
 
 ### Halo parameters
