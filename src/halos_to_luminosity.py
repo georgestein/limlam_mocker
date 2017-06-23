@@ -4,10 +4,13 @@ import scipy as sp
 import scipy.interpolate
 import sys
 
-def Mhalo_to_Lco(halos,model, scatter):
+def Mhalo_to_Lco(halos, model, scatter):
 
-    if model=='Li':
-        return Mhalo_to_Lco_Li(halos, scatter)
+    dict = {'Li':          Mhalo_to_Lco_Li,
+            'Padmanabhan': Mhalo_to_Lco_Padmanabhan}
+
+    if model in dict.keys():
+        return dict[model](halos, scatter)
 
     else:
         sys.exit('\n\n\tYour model, '+model+', does not seem to exist\n\t\tPlease check src/halos_to_luminosity.py to add it\n\n')
@@ -45,6 +48,16 @@ def Mhalo_to_Lco_Li(halos, scatter):
     print '\n\tMhalo to Lco calculated'
 
     return Lco 
+
+def Mhalo_to_Lco_Padmanabhan(halos, scatter):
+    """
+    halo mass to L_CO 
+    following the Padmanabhan 2017 model
+    arXiv 1706.01471
+    """
+
+
+    return Lco
 
 def get_sfr_table():
     """
