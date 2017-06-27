@@ -11,8 +11,19 @@ This will load in the halo catalogue, assign luminosities to each halo, and bin 
 
 A small sample halo catalogue is included, but many more of larger sizes are available by contacting the author. 
 
+### the basic workflow
+The example script provided in `lim_mocker.py` shows the basic workflow:
+* `import params` initialises the parameters for the mock map.
+* `load_peakpatch_catalogue` loads the halos from the lightcone specified.
+* `cull_peakpatch_catalogue` implements a mass cutoff.
+* `Mhalo_to_Lco` calculates luminosities for all halos.
+* `params_to_mapinst` generates the map instance from given parameters.
+* `Lco_to_map` then populates this map with temperatures.
+* `save_maps` saves the maps to the npz file as described above.
+* `map_to_pspec` then also calculates a 3D spherically averaged power spectrum for this map.
+
 ## TO ADD YOUR OWN L_CO(M,z,...) FUNCTION:
-add it to src/halos_to_luminosity.py, following the ones already there eg:    
+add it to halos_to_luminosity.py, following the ones already there eg:    
 ```
         dict = {'Li':          Mhalo_to_Lco_Li,
                 'Padmanabhan': Mhalo_to_Lco_Padmanabhan}
@@ -22,7 +33,7 @@ add it to src/halos_to_luminosity.py, following the ones already there eg:
 ```
 
 ## TO ADD YOUR OWN HALO CATALOGUE:
-copy the example in src/load_halos.py
+use the template in load_halos.py
 
 This code was written by George Stein    - gstein@cita.utoronto.ca
     with many additions by Dongwoo Chung - dongwooc@stanford.edu
