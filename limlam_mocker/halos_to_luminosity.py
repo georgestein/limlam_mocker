@@ -4,36 +4,35 @@ import scipy as sp
 import scipy.interpolate
 import sys
 
-def Mhalo_to_Lco(halos, model, scatter):
+def Mhalo_to_Lco(halos, model, coeffs):
 
     dict = {'Li':          Mhalo_to_Lco_Li,
             'Padmanabhan': Mhalo_to_Lco_Padmanabhan}
 
     if model in dict.keys():
-        return dict[model](halos, scatter)
+        return dict[model](halos, coeffs)
 
     else:
         sys.exit('\n\n\tYour model, '+model+', does not seem to exist\n\t\tPlease check src/halos_to_luminosity.py to add it\n\n')
 
 
-def Mhalo_to_Lco_Li(halos, scatter):
+def Mhalo_to_Lco_Li(halos, coeffs):
     """
     halo mass to SFR to L_CO 
     following the Tony li 2016 model
     arXiv 1503.08833
     """
-    # Power law parameters from paper
-    delta_mf  = 1.0
-    alpha     = 1.37
-    beta      = -1.74
-    sigma_sfr = 0.3
-    sigma_lco = 0.3
+    if coeffs == None:
+        # Power law parameters from paper
+        delta_mf,alpha,beta,sigma_sfr,sigma_lco = (
+            1.0, 1.37,-1.74, 0.3, 0.3)
+    else:
+        delta_mf,alpha,beta,sigma_sfr,sigma_lco = coeffs;
 
     # Get Star formation rate
     sfr_interp_tab = get_sfr_table()
     sfr            = sfr_interp_tab.ev(np.log10(halos.M), np.log10(halos.redshift+1))
-    if scatter:
-        sfr            = add_log_normal_scatter(sfr, sigma_sfr)
+    sfr            = add_log_normal_scatter(sfr, sigma_sfr)
 
     # infrared luminosity
     lir      = sfr * 1e10 / delta_mf
@@ -42,20 +41,23 @@ def Mhalo_to_Lco_Li(halos, scatter):
     Lcop     = lir**alphainv * 10**(-beta * alphainv)
     # Lco in L_sun
     Lco      =  4.9e-5 * Lcop
-    if scatter:
-        Lco      = add_log_normal_scatter(Lco, sigma_lco)
+    Lco      = add_log_normal_scatter(Lco, sigma_lco)
 
     print('\n\tMhalo to Lco calculated')
 
     return Lco 
 
-def Mhalo_to_Lco_Padmanabhan(halos, scatter):
+def Mhalo_to_Lco_Padmanabhan(halos, coeffs):
     """
     halo mass to L_CO 
     following the Padmanabhan 2017 model
     arXiv 1706.01471
     """
-    m10,m11,n10,n11,b10,b11,y10,y11 = 4.17e12,-1.17,0.0033,0.04,0.95,0.48,0.66,-0.33
+    if coeffs == None:
+        m10,m11,n10,n11,b10,b11,y10,y11 = (
+            4.17e12,-1.17,0.0033,0.04,0.95,0.48,0.66,-0.33)
+    else:
+        m10,m11,n10,n11,b10,b11,y10,y11 = coeffs
 
     z  = halos.redshift
     hm = halos.M

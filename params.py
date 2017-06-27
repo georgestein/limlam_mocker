@@ -3,7 +3,7 @@
 
 ### Lco(M, z, ...) model
 model   = 'Li' #'Padmanabhan'
-scatter = True
+coeffs  = None # specify None for default coeffs
 
 ### Halo parameters
 halo_catalogue_file = 'catalogues/peakpatchcatalogue_1pt4deg_z2pt4-3pt4.npz'

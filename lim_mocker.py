@@ -16,7 +16,7 @@ halos     = llm.cull_peakpatch_catalogue(halos, params.min_mass)
 
 
 ### Calculate Luminosity of each halo
-halos.Lco = llm.Mhalo_to_Lco(halos, params.model, params.scatter)
+halos.Lco = llm.Mhalo_to_Lco(halos, params.model, params.coeffs)
 
 
 #SETUP MAPS TO OUTPUT
