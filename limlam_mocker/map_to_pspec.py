@@ -1,10 +1,10 @@
 from __future__ import absolute_import, print_function
 import numpy as np
 
-def map_to_pspec(map,redshift_to_chi,nu_rest):
+def map_to_pspec(map,redshift_to_chi):
     x,y,z = map.pix_binedges_x, map.pix_binedges_y, map.nu_binedges
     t = map.maps
-    zco = redshift_to_chi(nu_rest/z-1)
+    zco = redshift_to_chi(map.nu_rest/z-1)
     # assume comoving transverse distance = comoving distance
     #     (i.e. no curvature)
     avg_ctd = np.mean(zco) 

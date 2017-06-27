@@ -38,6 +38,7 @@ def params_to_mapinst(params):
     map.npix_y = int(params.npix_y)
     map.nu_i   = float(params.nu_i)
     map.nu_f   = float(params.nu_f)
+    map.nu_rest= float(params.nu_rest)
 
     # get arrays describing the final intensity map to be output
     # map sky angle dimension

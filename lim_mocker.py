@@ -15,10 +15,6 @@ halos     = llm.load_peakpatch_catalogue(params.halo_catalogue_file)
 halos     = llm.cull_peakpatch_catalogue(halos, params.min_mass)
 
 
-### Calculate line freq from redshift
-halos.nu  = params.nu_rest/(halos.redshift+1)       
-
-
 ### Calculate Luminosity of each halo
 halos.Lco = llm.Mhalo_to_Lco(halos, params.model, params.scatter)
 
@@ -36,7 +32,7 @@ llm.save_maps(map)
 ##     we don't need astropy!
 from scipy.interpolate import UnivariateSpline
 redshift_to_chi = UnivariateSpline(halos.redshift,halos.chi)
-k,Pk,Pk_sampleerr = llm.map_to_pspec(map,redshift_to_chi,params.nu_rest)
+k,Pk,Pk_sampleerr = llm.map_to_pspec(map,redshift_to_chi)
 
 ### Plot central frequency map
 if params.plot_cube:

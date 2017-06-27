@@ -9,6 +9,9 @@ def Lco_to_map(halos,map):
     """
 
     print('\n\tBinning halos into map')
+
+    ### Calculate line freq from redshift
+    halos.nu  = map.nu_rest/(halos.redshift+1)       
     
     # Transform from Luminosity to Temperature
     halos.Lco = T_line(halos, map)
