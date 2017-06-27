@@ -1,3 +1,4 @@
+from __future__ import print_function
 import datetime
 
 class empty_table():
@@ -17,9 +18,9 @@ def write_time(string_in):
     fmt       = '%H:%M:%S on %m/%d/%Y'
     timestamp = datetime.datetime.now().strftime(fmt)
     bar = 72*'-'
-    print '\n\n'+bar
-    print string_in
-    print 'Time:      '+timestamp
-    print bar+'\n'
+    print( '\n\n'+bar )
+    print( string_in )
+    print( 'Time:      '+timestamp )
+    print( bar+'\n' )
 
     return

@@ -45,7 +45,7 @@ def Mhalo_to_Lco_Li(halos, scatter):
     if scatter:
         Lco      = add_log_normal_scatter(Lco, sigma_lco)
 
-    print '\n\tMhalo to Lco calculated'
+    print('\n\tMhalo to Lco calculated')
 
     return Lco 
 

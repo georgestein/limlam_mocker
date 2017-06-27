@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 import params
-from pykDict import *
+from .pykDict import *
 
 def getparams(filename):
     

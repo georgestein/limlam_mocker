@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import division
 from src.mods     import *
 
 
@@ -24,7 +25,7 @@ save_maps(map)
 
 ### Plot first frequency map
 if params.plot_cube:
-    im = plt.imshow(np.log10(map.maps[:,:,params.nmaps/2]+1e-1), extent=[-map.fov_x/2,map.fov_x/2,-map.fov_y/2,map.fov_y/2])
+    im = plt.imshow(np.log10(map.maps[:,:,params.nmaps//2]+1e-1), extent=[-map.fov_x/2,map.fov_x/2,-map.fov_y/2,map.fov_y/2])
     plt.colorbar(im,label=r'$log_{10}\ T_b\ [\mu K]$')
     plt.xlabel('degrees',fontsize=20)
     plt.ylabel('degrees',fontsize=20)

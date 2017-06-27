@@ -1,11 +1,12 @@
+from __future__ import absolute_import
 import numpy as np
-from   tools import *
+from  .tools import *
 
 def load_peakpatch_catalogue(filein):
 
     halos      = empty_table()            # creates empty class to put any halo info into  
     halo_info  = np.load(filein)     
-    print "\thalo catalogue contains:\n\t\t", halo_info.files
+    print("\thalo catalogue contains:\n\t\t", halo_info.files)
 
     halos.M          = halo_info['M']     # halo mass in Msun
     
@@ -26,7 +27,7 @@ def load_peakpatch_catalogue(filein):
     halos.ra         = np.arctan(halos.x_pos/halos.z_pos)*180./np.pi
     halos.dec        = np.arctan(halos.y_pos/halos.z_pos)*180./np.pi
 
-    print '\n\t%d halos loaded' % halos.nhalo
+    print('\n\t%d halos loaded' % halos.nhalo)
 
     return halos
 
@@ -54,6 +55,6 @@ def cull_peakpatch_catalogue(halos, min_mass):
 
     halos.nhalo = len(halos.M)
 
-    print '\n\t%d halos remain after mass cut' % halos.nhalo
+    print('\n\t%d halos remain after mass cut' % halos.nhalo)
 
     return halos

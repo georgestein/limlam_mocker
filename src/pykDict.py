@@ -1,5 +1,5 @@
 import os
-import string
+import sys
 
 def ask_for( key ):
     s = raw_input( "pykDict: enter value for '%s': " % key )
@@ -22,9 +22,9 @@ class pykDict( dict ):
     def __getitem__( self, key ):
         if key not in self:
             if self.ask:
-                print "pykDict: parameter '%s' not found" % key
+                print( "pykDict: parameter '%s' not found" % key)
                 val = ask_for( key )
-                print "pykDict: setting '%s' = %s" % (key,repr(val))
+                print( "pykDict: setting '%s' = %s" % (key,repr(val)))
                 dict.__setitem__( self, key, val )
             else:
                 return None
@@ -41,20 +41,18 @@ class pykDict( dict ):
             line = s[0]
             s = line.split('\\')
             if len(s) > 1:
-                old = string.join([old, s[0]])
+                old = ' '.join([old, s[0]])
                 continue
             else:
-                line = string.join([old, s[0]])
+                line = ' '.join([old, s[0]])
                 old = ''
-            for i in xrange(len(line)):
-                if line[i]!=' ':
-                    line = line[i:]
-                    break
+            while (line[0] == ' '):
+                line = line[1:] # there has to be a better way
             exec(line)
             s = line.split('=')
             if len(s) != 2:
-                print "Error parsing line:"
-                print line
+                print( "Error parsing line:")
+                print( line)
                 continue
             key = s[0].strip()
             val = eval(s[1].strip()) # XXX:make safer

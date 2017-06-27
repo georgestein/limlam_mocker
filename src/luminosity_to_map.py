@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 import numpy as np
-from   tools import *
+from  .tools import *
 
 def Lco_to_map(halos,map):
     """
@@ -7,7 +8,7 @@ def Lco_to_map(halos,map):
     and bins into 3d intensity map data cube
     """
 
-    print '\n\tBinning halos into map'
+    print('\n\tBinning halos into map')
     
     # Transform from Luminosity to Temperature
     halos.Lco = T_line(halos, map)
@@ -44,7 +45,7 @@ def T_line(halos, map):
 
 
 def save_maps(map):
-    print '\n\tSaving Map Data Cube to\n\t\t',map.output_file
+    print('\n\tSaving Map Data Cube to\n\t\t',map.output_file)
 
     np.savez(map.output_file,
              fov_x=map.fov_x, fov_y=map.fov_y,
