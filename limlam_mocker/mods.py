@@ -7,11 +7,12 @@ import matplotlib.pylab   as plt
 import scipy              as sp
 import params             as params
 import datetime
-from   src.tools               import *
-from   src.getparams           import *
-from   src.load_halos          import *
-from   src.halos_to_luminosity import *
-from   src.luminosity_to_map   import *
+from   .tools               import *
+from   .getparams           import *
+from   .load_halos          import *
+from   .halos_to_luminosity import *
+from   .luminosity_to_map   import *
+from   .map_to_pspec        import *
 
 #Get Parameters for run
 write_time('Starting Line Intensity Mapper')

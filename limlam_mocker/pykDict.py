@@ -77,7 +77,7 @@ class pykDict( dict ):
         ks = self.keys()
         for k in ks:
             try:
-                if otherDict[k] == self.params[k]:
+                if otherDict[k] == self[k]:
                     continue
                 diff += [k]
                 break

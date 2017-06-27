@@ -20,12 +20,14 @@ def load_peakpatch_catalogue(filein):
     halos.vz         = halo_info['vz']
 
     halos.redshift   = halo_info['zhalo'] # redshift of halo
+    halos.redshifto  = (halos.redshift+1)*(1+halos.vz/299792.458)
+                                          # observed redshift incl velocities
     halos.zformation = halo_info['zform'] # formation redshift of halo
 
     halos.nhalo = len(halos.M)
     
-    halos.ra         = np.arctan(halos.x_pos/halos.z_pos)*180./np.pi
-    halos.dec        = np.arctan(halos.y_pos/halos.z_pos)*180./np.pi
+    halos.ra         = np.arctan2(-halos.y_pos,halos.z_pos)*180./np.pi
+    halos.dec        = np.arcsin(  halos.x_pos/halos.chi  )*180./np.pi
 
     print('\n\t%d halos loaded' % halos.nhalo)
 
@@ -36,23 +38,12 @@ def cull_peakpatch_catalogue(halos, min_mass):
 
     dm = [halos.M > min_mass]
 
-    halos.M     = halos.M[dm]
-
-    halos.x_pos = halos.x_pos[dm]
-    halos.y_pos = halos.y_pos[dm]
-    halos.z_pos = halos.z_pos[dm]
-    halos.chi   = halos.chi[dm]
-
-    halos.vx    = halos.vx[dm]
-    halos.vy    = halos.vy[dm]
-    halos.vz    = halos.vz[dm]
-
-    halos.redshift   = halos.redshift[dm]
-    halos.zformation = halos.zformation[dm]
-
-    halos.ra  = halos.ra[dm]
-    halos.dec = halos.dec[dm]
-
+    for i in dir(halos):
+        if i[0]=='_': continue
+        try:
+            setattr(halos,i,getattr(halos,i)[dm])
+        except TypeError:
+            pass
     halos.nhalo = len(halos.M)
 
     print('\n\t%d halos remain after mass cut' % halos.nhalo)
