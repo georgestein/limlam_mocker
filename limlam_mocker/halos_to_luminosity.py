@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import scipy as sp
 import scipy.interpolate
 import sys
+import os
 
 def Mhalo_to_Lco(halos, model, coeffs):
 
@@ -79,8 +80,9 @@ def get_sfr_table():
     Intermediate processing of tabulated data      
     """
 
-    dat_zp1, dat_logm, dat_logsfr, _ = np.loadtxt('tables/sfr_behroozi_release.dat',
-                                                  unpack=True)
+    tablepath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    tablepath+= '/tables/sfr_behroozi_release.dat'
+    dat_zp1, dat_logm, dat_logsfr, _ = np.loadtxt(tablepath, unpack=True)
 
     dat_logzp1 = np.log10(dat_zp1)
     dat_sfr    = 10.**dat_logsfr
