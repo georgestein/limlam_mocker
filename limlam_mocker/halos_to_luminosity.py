@@ -27,7 +27,7 @@ def Mhalo_to_Lco_Li(halos, coeffs):
     arXiv 1503.08833
     """
     global sfr_interp_tab
-    if coeffs == None:
+    if coeffs is None:
         # Power law parameters from paper
         log_delta_mf,alpha,beta,sigma_sfr,sigma_lco = (
             0.0, 1.37,-1.74, 0.3, 0.3)
@@ -36,7 +36,7 @@ def Mhalo_to_Lco_Li(halos, coeffs):
     delta_mf = 10**log_delta_mf;
 
     # Get Star formation rate
-    if None == sfr_interp_tab:
+    if sfr_interp_tab is None:
         sfr_interp_tab = get_sfr_table()
     sfr            = sfr_interp_tab.ev(np.log10(halos.M), np.log10(halos.redshift+1))
     sfr            = add_log_normal_scatter(sfr, sigma_sfr)
@@ -60,7 +60,7 @@ def Mhalo_to_Lco_Padmanabhan(halos, coeffs):
     following the Padmanabhan 2017 model
     arXiv 1706.01471
     """
-    if coeffs == None:
+    if coeffs is None:
         m10,m11,n10,n11,b10,b11,y10,y11 = (
             4.17e12,-1.17,0.0033,0.04,0.95,0.48,0.66,-0.33)
     else:
