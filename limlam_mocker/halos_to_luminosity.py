@@ -25,10 +25,11 @@ def Mhalo_to_Lco_Li(halos, coeffs):
     """
     if coeffs == None:
         # Power law parameters from paper
-        delta_mf,alpha,beta,sigma_sfr,sigma_lco = (
-            1.0, 1.37,-1.74, 0.3, 0.3)
+        log_delta_mf,alpha,beta,sigma_sfr,sigma_lco = (
+            0.0, 1.37,-1.74, 0.3, 0.3)
     else:
-        delta_mf,alpha,beta,sigma_sfr,sigma_lco = coeffs;
+        log_delta_mf,alpha,beta,sigma_sfr,sigma_lco = coeffs;
+    delta_mf = 10**log_delta_mf;
 
     # Get Star formation rate
     sfr_interp_tab = get_sfr_table()
