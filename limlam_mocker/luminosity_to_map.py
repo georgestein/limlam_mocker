@@ -14,7 +14,7 @@ def Lco_to_map(halos,map):
     halos.nu  = map.nu_rest/(halos.redshift+1)       
     
     # Transform from Luminosity to Temperature
-    halos.Lco = T_line(halos, map)
+    halos.Tco = T_line(halos, map)
 
     # flip frequency bins because np.histogram needs increasing bins
     bins3D = [map.pix_binedges_x, map.pix_binedges_y, map.nu_binedges[::-1]]
@@ -22,7 +22,7 @@ def Lco_to_map(halos,map):
     # bin in RA, DEC, NU_obs
     maps, edges = np.histogramdd( np.c_[halos.ra, halos.dec, halos.nu], 
                                   bins    = bins3D,
-                                  weights = halos.Lco )
+                                  weights = halos.Tco )
     # flip back frequency bins
     return maps[:,:,::-1]
 
@@ -41,9 +41,9 @@ def T_line(halos, map):
     """ 
 
     convfac = 2.63083
-    Lco     = 1./2*convfac/halos.nu**2 * halos.Lco/4/np.pi/halos.chi**2/(1+halos.redshift)**2/map.dnu/map.Ompix
+    Tco     = 1./2*convfac/halos.nu**2 * halos.Lco/4/np.pi/halos.chi**2/(1+halos.redshift)**2/map.dnu/map.Ompix
 
-    return Lco
+    return Tco
 
 
 
