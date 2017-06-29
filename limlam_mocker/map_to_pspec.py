@@ -23,4 +23,4 @@ def map_to_pspec(map,redshift_to_chi):
     nmodes = np.histogram(kgrid[kgrid>0],bins=kbins)[0]
     Pk = Pk_nmodes/nmodes
     k = (kbins[1:]+kbins[:-1])/2
-    return k,Pk,Pk/np.sqrt(nmodes)
+    return k,Pk,nmodes
