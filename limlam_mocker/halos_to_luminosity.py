@@ -4,6 +4,9 @@ import scipy as sp
 import scipy.interpolate
 import sys
 import os
+from . import debug
+
+sfr_interp_tab = None
 
 def Mhalo_to_Lco(halos, model, coeffs):
 
@@ -23,6 +26,7 @@ def Mhalo_to_Lco_Li(halos, coeffs):
     following the Tony li 2016 model
     arXiv 1503.08833
     """
+    global sfr_interp_tab
     if coeffs == None:
         # Power law parameters from paper
         log_delta_mf,alpha,beta,sigma_sfr,sigma_lco = (
@@ -32,7 +36,8 @@ def Mhalo_to_Lco_Li(halos, coeffs):
     delta_mf = 10**log_delta_mf;
 
     # Get Star formation rate
-    sfr_interp_tab = get_sfr_table()
+    if None == sfr_interp_tab:
+        sfr_interp_tab = get_sfr_table()
     sfr            = sfr_interp_tab.ev(np.log10(halos.M), np.log10(halos.redshift+1))
     sfr            = add_log_normal_scatter(sfr, sigma_sfr)
 
@@ -45,7 +50,7 @@ def Mhalo_to_Lco_Li(halos, coeffs):
     Lco      =  4.9e-5 * Lcop
     Lco      = add_log_normal_scatter(Lco, sigma_lco)
 
-    print('\n\tMhalo to Lco calculated')
+    if debug.verbose: print('\n\tMhalo to Lco calculated')
 
     return Lco 
 
