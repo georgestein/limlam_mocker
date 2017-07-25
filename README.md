@@ -35,6 +35,11 @@ add it to halos_to_luminosity.py, following the ones already there eg:
 ## TO ADD YOUR OWN HALO CATALOGUE:
 use the template in load_halos.py
 
+## ADVANCED USAGE: USING `limlam_mocker` DIRECTLY IN YOUR OWN CODE
+This repo is a complete program in itself, designed so that you can painlessly run `lim_mocker.py` and not have to worry about the guts. If you want to use code other than `lim_mocker.py` with this library, the `limlam_mocker` folder inside this repository will function as a self-contained Python package.
+
+Depending on the OS and the Python version, what may work is to simply place this folder in your local site-packages directory or create a symlink there. So if the contents of e.g. `~/.local/lib/python3.5/site-packages/limlam_mocker` (the local site-packages directory for Python 3.5 in Linux) are equal to the contents of the `limlam_mocker` folder in this repo (not the root contents of this repo!), you should be able to take advantage of `limlam_mocker` functions from any Python script on your computer, regardless of where it is placed.
+
 This code was written by George Stein    - gstein@cita.utoronto.ca
     with many additions by Dongwoo Chung - dongwooc@stanford.edu
 
