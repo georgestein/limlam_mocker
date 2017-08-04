@@ -8,38 +8,37 @@ import limlam_mocker      as llm
 import params             as params
 
 llm.debug.verbose = True
-plt.rcParams['font.size'] = 16
 llm.write_time('Starting Line Intensity Mapper')
 
-#SETUP MAPS TO OUTPUT
+### Setup maps to output
 mapinst   = llm.params_to_mapinst(params);
 
 ### Load halos from catalogue
-halos     = llm.load_peakpatch_catalogue(params.halo_catalogue_file)
-halos     = llm.cull_peakpatch_catalogue(halos, params.min_mass, mapinst)
-
+halos, cosmo = llm.load_peakpatch_catalogue(params.halo_catalogue_file)
+halos        = llm.cull_peakpatch_catalogue(halos, params.min_mass, mapinst)
 
 ### Calculate Luminosity of each halo
-halos.Lco = llm.Mhalo_to_Lco(halos, params.model, params.coeffs)
+halos.Lco    = llm.Mhalo_to_Lco(halos, params.model, params.coeffs)
 
 ### Bin halo luminosities into map
-mapinst.maps  = llm.Lco_to_map(halos,mapinst)
+mapinst.maps = llm.Lco_to_map(halos,mapinst)
 
 ### Output map to file
 llm.save_maps(mapinst)
 
 ### Calculate power spectrum
-## if the catalogue contains halo comoving distances and redshifts ...
-##     we don't need astropy!
-from scipy.interpolate import UnivariateSpline
-redshift_to_chi = UnivariateSpline(halos.redshift,halos.chi)
-k,Pk,Nmodes = llm.map_to_pspec(mapinst,redshift_to_chi)
+k,Pk,Nmodes = llm.map_to_pspec(mapinst,cosmo)
 Pk_sampleerr = Pk/np.sqrt(Nmodes)
 
+
+llm.write_time('Finished Line Intensity Mapper')
+
+
 ### Plot central frequency map
+plt.rcParams['font.size'] = 16
 if params.plot_cube:
     plt.figure()
-    im = plt.imshow(np.log10(mapinst.maps[:,:,params.nmaps//2]+1e-1), extent=[-mapinst.fov_x/2,mapinst.fov_x/2,-mapinst.fov_y/2,mapinst.fov_y/2])
+    im = plt.imshow(np.log10(mapinst.maps[:,:,params.nmaps//2]+1e-6), extent=[-mapinst.fov_x/2,mapinst.fov_x/2,-mapinst.fov_y/2,mapinst.fov_y/2],vmin=-1,vmax=2)
     plt.colorbar(im,label=r'$log_{10}\ T_b\ [\mu K]$')
     plt.xlabel('degrees',fontsize=20)
     plt.ylabel('degrees',fontsize=20)
@@ -58,3 +57,5 @@ if params.plot_pspec:
 
 if params.plot_cube or params.plot_pspec:
     plt.show()
+
+

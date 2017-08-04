@@ -3,6 +3,7 @@ import numpy as np
 from  .tools import *
 from . import debug
 
+@timeme
 def Lco_to_map(halos,map):
     """
     Converts Luminosity to brightness temperature
@@ -45,8 +46,7 @@ def T_line(halos, map):
 
     return Tco
 
-
-
+@timeme
 def save_maps(map):
     if debug.verbose: print('\n\tSaving Map Data Cube to\n\t\t',map.output_file)
     np.savez(map.output_file,
@@ -57,7 +57,5 @@ def save_maps(map):
              map_pixel_dec   = map.pix_bincents_y,
              map_frequencies = map.nu_bincents,
              map_cube        = map.maps)
-    
-    write_time('Finished Intensity Map Generation')
 
     return

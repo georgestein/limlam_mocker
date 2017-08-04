@@ -5,9 +5,11 @@ import scipy.interpolate
 import sys
 import os
 from . import debug
+from .tools import *
 
 sfr_interp_tab = None
 
+@timeme
 def Mhalo_to_Lco(halos, model, coeffs):
 
     dict = {'Li':          Mhalo_to_Lco_Li,

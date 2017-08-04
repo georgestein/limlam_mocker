@@ -1,6 +1,8 @@
 from __future__ import print_function
+import time
 import datetime
 import numpy as np
+import scipy as sp
 
 class empty_table():
     """ 
@@ -25,6 +27,17 @@ def write_time(string_in):
     print( bar+'\n' )
 
     return
+
+def timeme(method):
+    def wrapper(*args, **kw):
+        startTime = int(round(time.time()))
+        result = method(*args, **kw)
+        endTime = int(round(time.time()))
+                      
+        print('  ',endTime - startTime,'sec')
+        return result
+
+    return wrapper
 
 def params_to_mapinst(params):
     map             = empty_table() # creates empty class to put map info into 
@@ -61,3 +74,41 @@ def params_to_mapinst(params):
     map.nu_binedges = np.arange(map.nu_i,map.nu_f-map.dnu,-map.dnu) 
     map.nu_bincents = map.nu_binedges[:-1] - map.dnu/2
     return map
+
+
+
+# Cosmology Functions
+# Explicitily defined here instead of using something like astropy 
+# in order for ease of use on any machine 
+
+def hubble(z,h,omegam):
+    return h*100*np.sqrt(omegam*(1+z)**3+1-omegam)
+
+def drdz(z,h,omegam):
+    return 299792.458 / hubble(z,h,omegam)  
+
+def chi_to_redshift(chi, cosmo):
+    # Transform from redshift to comoving distance
+    # Agrees with NED cosmology to 0.01% - http://www.astro.ucla.edu/~wright/CosmoCalc.html
+    zinterp = np.linspace(0,4,10000)
+    dz      = zinterp[1]-zinterp[0]
+
+    chiinterp  = np.cumsum( drdz(zinterp,cosmo.h,cosmo.Omega_M) * dz)
+    chiinterp -= chiinterp[0]
+    z_of_chi   = sp.interpolate.interp1d(chiinterp,zinterp)
+
+    return z_of_chi(chi)
+
+def redshift_to_chi(z, cosmo):
+    # Transform from comoving distance to redshift 
+    # Agrees with NED cosmology to 0.01% - http://www.astro.ucla.edu/~wright/CosmoCalc.html
+    zinterp = np.linspace(0,4,10000)
+    dz      = zinterp[1]-zinterp[0]
+
+    chiinterp  = np.cumsum( drdz(zinterp,cosmo.h,cosmo.Omega_M) * dz)
+    chiinterp -= chiinterp[0]
+    chi_of_z   = sp.interpolate.interp1d(zinterp,chiinterp)
+
+    return chi_of_z(z)
+
+

@@ -3,10 +3,22 @@ import numpy as np
 from  .tools import *
 from . import debug
 
+@timeme
 def load_peakpatch_catalogue(filein):
     halos      = empty_table()            # creates empty class to put any halo info into  
+    cosmo      = empty_table()            # creates empty class to put any cosmology info into  
+
     halo_info  = np.load(filein)     
     if debug.verbose: print("\thalo catalogue contains:\n\t\t", halo_info.files)
+    
+    #get cosmology from halo catalogue
+    params_dict    = halo_info['cosmo_header'][()]
+    cosmo.Omega_M  = params_dict.get('Omega_M')
+    cosmo.Omega_B  = params_dict.get('Omega_B')
+    cosmo.Omega_L  = params_dict.get('Omega_L')
+    cosmo.h        = params_dict.get('h'      )
+    cosmo.ns       = params_dict.get('ns'     )
+    cosmo.sigma8   = params_dict.get('sigma8' )
 
     halos.M          = halo_info['M']     # halo mass in Msun
     
@@ -19,9 +31,8 @@ def load_peakpatch_catalogue(filein):
     halos.vy         = halo_info['vy']
     halos.vz         = halo_info['vz']
 
-    halos.redshift   = halo_info['zhalo'] # redshift of halo
-    halos.redshifto  = (halos.redshift+1)*(1+halos.vz/299792.458)
-                                          # observed redshift incl velocities
+    halos.redshift   = halo_info['zhalo'] # observed redshift incl velocities
+                                          
     halos.zformation = halo_info['zform'] # formation redshift of halo
 
     halos.nhalo = len(halos.M)
@@ -31,9 +42,9 @@ def load_peakpatch_catalogue(filein):
 
     if debug.verbose: print('\n\t%d halos loaded' % halos.nhalo)
 
-    return halos
+    return halos, cosmo
 
-
+@timeme
 def cull_peakpatch_catalogue(halos, min_mass, mapinst):
     dm = [(halos.M > min_mass) * (halos.redshift >= mapinst.z_i)
                                 * (np.abs(halos.ra) <= mapinst.fov_x/2)
