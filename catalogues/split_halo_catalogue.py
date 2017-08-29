@@ -1,22 +1,14 @@
 #!/usr/bin/env python
-'''
-This is a tool to take a full halo catalogue and split it into smaller sky regions
-useful for MCMC analysis
-'''
 from __future__ import absolute_import, print_function
 import numpy as np
-import sys
 
-# Parameters
-filein = sys.argv[1]    # Full halo catalogue to split into smaller sky regions
-fov_x  = 9.52           # FOV of full catalogue
+filein = 'COMAP_z2.39-3.44_1140Mpc_seed_13579.npz'
+fov_x  = 9.52
 fov_y  = 9.52
 
-fov_x_subfield = 1.0    # FOV of smaller sky region
+fov_x_subfield = 1.0
 fov_y_subfield = 1.0
 
-
-# Code
 n_subfield   = int((fov_x//fov_x_subfield) * (fov_y//fov_y_subfield))
 n_y_subfield = int(fov_x//fov_x_subfield)
 n_x_subfield = int(fov_y//fov_y_subfield)
@@ -67,8 +59,8 @@ def load_peakpatch_catalogue(filein):
 
     halos.nhalo = len(halos.M)
     
-    halos.ra         = np.arctan2(-halos.y_pos,halos.z_pos)*180./np.pi
-    halos.dec        = np.arcsin(  halos.x_pos/halos.chi  )*180./np.pi
+    halos.ra         = np.arctan2(-halos.x_pos,halos.z_pos)*180./np.pi
+    halos.dec        = np.arcsin(  halos.y_pos/halos.chi  )*180./np.pi
 
     print('\n\t%d halos loaded' % halos.nhalo)
 
@@ -96,21 +88,23 @@ def cull_peakpatch_catalogue(halos,fov_x_l, fov_x_r, fov_y_l, fov_y_r):
     return halosi
 
 
+
+
 # Load in full halo catalogue
 halos, cosmo = load_peakpatch_catalogue(filein)
 
 # loop over each subfield and save halos as seperate files
-for i in range(n_x_subfield):
-    for j in range(n_y_subfield):
+for i in range(n_y_subfield):
+    for j in range(n_x_subfield):
 
-        fov_x_l  = -fov_x_new/2 + fov_x_subfield * (i  )
-        fov_x_r  = -fov_x_new/2 + fov_x_subfield * (i+1)
+        fov_x_l  = -fov_x_new/2 + fov_x_subfield * (j  )
+        fov_x_r  = -fov_x_new/2 + fov_x_subfield * (j+1)
 
-        fov_y_l  = -fov_y_new/2 + fov_y_subfield * (j  )
-        fov_y_r  = -fov_y_new/2 + fov_y_subfield * (j+1)
+        fov_y_l  = -fov_y_new/2 + fov_y_subfield * (i  )
+        fov_y_r  = -fov_y_new/2 + fov_y_subfield * (i+1)
 
-        cen_fov_x = -fov_x_new/2 + fov_x_subfield * (i+1./2)
-        cen_fov_y = -fov_y_new/2 + fov_y_subfield * (j+1./2)
+        cen_fov_x = -fov_x_new/2 + fov_x_subfield * (j+1./2)
+        cen_fov_y = -fov_y_new/2 + fov_y_subfield * (i+1./2)
 
         # cut halos outside sub-field of view
         halosi = cull_peakpatch_catalogue(halos, fov_x_l, fov_x_r, fov_y_l, fov_y_r)

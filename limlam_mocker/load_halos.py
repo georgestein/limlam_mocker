@@ -20,8 +20,9 @@ def load_peakpatch_catalogue(filein):
     cosmo.ns       = params_dict.get('ns'     )
     cosmo.sigma8   = params_dict.get('sigma8' )
 
-    cen_x_fov  = params_dict.get('cen_y_fov', 0.) #if the halo catalogue is not centered along the z axis
-    cen_y_fov  = params_dict.get('cen_x_fov', 0.) #if the halo catalogue is not centered along the z axis
+    cen_x_fov  = params_dict.get('cen_x_fov', 0.) #if the halo catalogue is not centered along the z axis
+    cen_y_fov  = params_dict.get('cen_y_fov', 0.) #if the halo catalogue is not centered along the z axis
+
 
     halos.M          = halo_info['M']     # halo mass in Msun
     
@@ -40,8 +41,8 @@ def load_peakpatch_catalogue(filein):
 
     halos.nhalo = len(halos.M)
     
-    halos.ra         = np.arctan2(-halos.y_pos,halos.z_pos)*180./np.pi - cen_x_fov
-    halos.dec        = np.arcsin(  halos.x_pos/halos.chi  )*180./np.pi - cen_y_fov
+    halos.ra         = np.arctan2(-halos.x_pos,halos.z_pos)*180./np.pi - cen_x_fov
+    halos.dec        = np.arcsin(  halos.y_pos/halos.chi  )*180./np.pi - cen_y_fov
 
     if debug.verbose: print('\n\t%d halos loaded' % halos.nhalo)
 
