@@ -37,7 +37,7 @@ llm.write_time('Finished Line Intensity Mapper')
 ### Plot central frequency map
 plt.rcParams['font.size'] = 16
 if params.plot_cube:
-    plt.figure()
+    plt.figure().set_tight_layout(True)
     im = plt.imshow(np.log10(mapinst.maps[:,:,params.nmaps//2]+1e-6), extent=[-mapinst.fov_x/2,mapinst.fov_x/2,-mapinst.fov_y/2,mapinst.fov_y/2],vmin=-1,vmax=2)
     plt.colorbar(im,label=r'$log_{10}\ T_b\ [\mu K]$')
     plt.xlabel('degrees',fontsize=20)
@@ -45,7 +45,7 @@ if params.plot_cube:
     plt.title('simulated map at {0:.3f} GHz'.format(mapinst.nu_bincents[params.nmaps//2]),fontsize=24)
 
 if params.plot_pspec:
-    plt.figure()
+    plt.figure().set_tight_layout(True)
     plt.errorbar(k,k**3*Pk/(2*np.pi**2),k**3*Pk_sampleerr/(2*np.pi**2),
                     lw=3,capsize=0)
     plt.gca().set_xscale('log')

@@ -13,7 +13,9 @@ sfr_interp_tab = None
 def Mhalo_to_Lco(halos, model, coeffs):
 
     dict = {'Li':          Mhalo_to_Lco_Li,
-            'Padmanabhan': Mhalo_to_Lco_Padmanabhan}
+            'Padmanabhan': Mhalo_to_Lco_Padmanabhan,
+            'arbitrary':   Mhalo_to_Lco_arbitrary,
+            }
 
     if model in dict.keys():
         return dict[model](halos, coeffs)
@@ -28,7 +30,6 @@ def Mhalo_to_Lco_Li(halos, coeffs):
     following the Tony li 2016 model
     arXiv 1503.08833
     """
-    global sfr_interp_tab
     if coeffs is None:
         # Power law parameters from paper
         log_delta_mf,alpha,beta,sigma_sfr,sigma_lco = (
@@ -38,10 +39,7 @@ def Mhalo_to_Lco_Li(halos, coeffs):
     delta_mf = 10**log_delta_mf;
 
     # Get Star formation rate
-    if sfr_interp_tab is None:
-        sfr_interp_tab = get_sfr_table()
-    sfr            = sfr_interp_tab.ev(np.log10(halos.M), np.log10(halos.redshift+1))
-    sfr            = add_log_normal_scatter(sfr, sigma_sfr)
+    sfr = Mhalo_to_sfr_Behroozi(halos, sigma_sfr);
 
     # infrared luminosity
     lir      = sfr * 1e10 / delta_mf
@@ -81,6 +79,38 @@ def Mhalo_to_Lco_Padmanabhan(halos, coeffs):
 
     return Lco
 
+def Mhalo_to_Lco_arbitrary(halos, coeffs):
+    """
+    halo mass to L_CO 
+    allows for utterly arbitrary models!
+    coeffs:
+        coeffs[0] is a function that takes halos as its only argument
+        coeffs[1] is a boolean: do we need to calculate sfr or not?
+        coeffs[2] is optional sigma_sfr
+        alternatively, if coeffs is callable, then assume we calculate sfr
+            default sigma_sfr is 0.3 dex
+    if sfr is calculated, it is stored as a halos attribute
+    """
+    sigma_sfr = 0.3
+    if callable(coeffs):
+        sfr_calc = True
+        lco_func = coeffs
+    else:
+        lco_func, sfr_calc = coeffs[:2]
+        if len(coeffs)>2:
+            sigma_sfr = coeffs[2]
+    if sfr_calc:
+        halos.sfr = Mhalo_to_sfr_Behroozi(halos, sigma_sfr)
+    return lco_func(halos)
+
+def Mhalo_to_sfr_Behroozi(halos, sigma_sfr):
+    global sfr_interp_tab
+    if sfr_interp_tab is None:
+        sfr_interp_tab = get_sfr_table()
+    sfr = sfr_interp_tab.ev(np.log10(halos.M), np.log10(halos.redshift+1))
+    sfr = add_log_normal_scatter(sfr, sigma_sfr)
+    return sfr
+    
 def get_sfr_table():
     """
     LOAD SFR TABLE 
@@ -101,8 +131,9 @@ def get_sfr_table():
     dat_sfr     = np.reshape(dat_sfr, (dat_logm.size, dat_logzp1.size))
 
     # Get interpolated SFR value(s)    
-    sfr_interp_tab = sp.interpolate.RectBivariateSpline(dat_logm, dat_logzp1, dat_sfr,
-                                                        kx=1, ky=1)
+    sfr_interp_tab = sp.interpolate.RectBivariateSpline(
+                            dat_logm, dat_logzp1, dat_sfr,
+                            kx=1, ky=1)
     return sfr_interp_tab
 
 
