@@ -9,7 +9,6 @@ def Lco_to_map(halos,map,units='temperature'):
     Converts Luminosity to brightness temperature
     and bins into 3d intensity map data cube
     """
-    if debug.verbose: print('\n\tBinning halos into map')
 
     ### Calculate line freq from redshift
     halos.nu  = map.nu_rest/(halos.redshift+1)       
@@ -17,17 +16,22 @@ def Lco_to_map(halos,map,units='temperature'):
     # Transform from Luminosity to Temperature (uK)
     # ... or to flux density (Jy/sr)
     if (units=='intensity'):
+        if debug.verbose: print('\n\tcalculating halo intensities')
         halos.Tco = I_line(halos, map)
     else:
+        if debug.verbose: print('\n\tcalculating halo temperatures')
         halos.Tco = T_line(halos, map)
 
     # flip frequency bins because np.histogram needs increasing bins
     bins3D = [map.pix_binedges_x, map.pix_binedges_y, map.nu_binedges[::-1]]
 
     # bin in RA, DEC, NU_obs
+    if debug.verbose: print('\n\tBinning halos into map')
     maps, edges = np.histogramdd( np.c_[halos.ra, halos.dec, halos.nu], 
                                   bins    = bins3D,
                                   weights = halos.Tco )
+    if (units=='intensity'):
+        maps/= map.Ompix
     # flip back frequency bins
     return maps[:,:,::-1]
 

@@ -1,4 +1,5 @@
 from __future__ import print_function
+from . import debug
 import time
 import datetime
 import numpy as np
@@ -34,7 +35,7 @@ def timeme(method):
         result = method(*args, **kw)
         endTime = int(round(time.time()))
                       
-        print('  ',endTime - startTime,'sec')
+        if debug.verbose: print('  ',endTime - startTime,'sec')
         return result
 
     return wrapper
