@@ -46,8 +46,8 @@ def params_to_mapinst(params):
     map.output_file = params.map_output_file 
 
     map.nmaps  = int(params.nmaps)
-    map.fov_y  = float(params.fov_x)
-    map.fov_x  = float(params.fov_y)
+    map.fov_x  = float(params.fov_x)
+    map.fov_y  = float(params.fov_y)
     map.npix_x = int(params.npix_x)
     map.npix_y = int(params.npix_y)
     map.nu_i   = float(params.nu_i)
