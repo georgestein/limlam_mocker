@@ -63,11 +63,11 @@ def params_to_mapinst(params):
 
     map.Ompix = (map.pix_size_x*np.pi/180)*(map.pix_size_y*np.pi/180) # pixel size to convert to brightness temp 
 
-    map.pix_binedges_x = np.arange(-map.fov_x/2,map.fov_x/2+ map.pix_size_x, map.pix_size_x)
-    map.pix_binedges_y = np.arange(-map.fov_y/2,map.fov_y/2+ map.pix_size_y, map.pix_size_y)
+    map.pix_binedges_x = np.linspace(-map.fov_x/2,map.fov_x/2,map.npix_x+1)
+    map.pix_binedges_y = np.linspace(-map.fov_y/2,map.fov_y/2,map.npix_y+1)
 
-    map.pix_bincents_x =  0.5*(map.pix_binedges_x[:-1] + map.pix_binedges_x[:-1])
-    map.pix_bincents_y =  0.5*(map.pix_binedges_y[:-1] + map.pix_binedges_y[:-1])
+    map.pix_bincents_x =  0.5*(map.pix_binedges_x[1:] + map.pix_binedges_x[:-1])
+    map.pix_bincents_y =  0.5*(map.pix_binedges_y[1:] + map.pix_binedges_y[:-1])
 
     # map frequency dimension 
     # negative steps as larger observed frequency means lower redshift
