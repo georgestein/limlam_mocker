@@ -70,9 +70,9 @@ def params_to_mapinst(params):
     map.pix_bincents_y =  0.5*(map.pix_binedges_y[1:] + map.pix_binedges_y[:-1])
 
     # map frequency dimension 
-    # negative steps as larger observed frequency means lower redshift
-    map.dnu         = (map.nu_i - map.nu_f)/(map.nmaps)
-    map.nu_binedges = np.arange(map.nu_i,map.nu_f-map.dnu,-map.dnu) 
+    # use linspace to ensure nmaps channels
+    map.nu_binedges = np.linspace(map.nu_i,map.nu_f,map.nmaps) 
+    map.dnu         = np.mean(np.diff(map.nu_binedges))
     map.nu_bincents = map.nu_binedges[:-1] - map.dnu/2
     return map
 

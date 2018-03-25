@@ -39,10 +39,11 @@ def Mhalo_to_Lco_Li(halos, coeffs):
     delta_mf = 10**log_delta_mf;
 
     # Get Star formation rate
-    sfr = Mhalo_to_sfr_Behroozi(halos, sigma_sfr);
+    if not hasattr(halos,'sfr'):
+        halos.sfr = Mhalo_to_sfr_Behroozi(halos, sigma_sfr);
 
     # infrared luminosity
-    lir      = sfr * 1e10 / delta_mf
+    lir      = halos.sfr * 1e10 / delta_mf
     alphainv = 1./alpha
     # Lco' (observers units)
     Lcop     = lir**alphainv * 10**(-beta * alphainv)
@@ -87,11 +88,13 @@ def Mhalo_to_Lco_arbitrary(halos, coeffs):
         coeffs[0] is a function that takes halos as its only argument
         coeffs[1] is a boolean: do we need to calculate sfr or not?
         coeffs[2] is optional sigma_sfr
+        coeffs[3] is optional argument that must almost never be invoked
         alternatively, if coeffs is callable, then assume we calculate sfr
             default sigma_sfr is 0.3 dex
     if sfr is calculated, it is stored as a halos attribute
     """
     sigma_sfr = 0.3
+    bad_extrapolation = False
     if callable(coeffs):
         sfr_calc = True
         lco_func = coeffs
@@ -99,23 +102,26 @@ def Mhalo_to_Lco_arbitrary(halos, coeffs):
         lco_func, sfr_calc = coeffs[:2]
         if len(coeffs)>2:
             sigma_sfr = coeffs[2]
+        if len(coeffs)>3:
+            bad_extrapolation = coeffs[3]
     if sfr_calc:
-        halos.sfr = Mhalo_to_sfr_Behroozi(halos, sigma_sfr)
+        halos.sfr = Mhalo_to_sfr_Behroozi(halos, sigma_sfr, bad_extrapolation)
     return lco_func(halos)
 
-def Mhalo_to_sfr_Behroozi(halos, sigma_sfr):
+def Mhalo_to_sfr_Behroozi(halos, sigma_sfr, bad_extrapolation=False):
     global sfr_interp_tab
     if sfr_interp_tab is None:
-        sfr_interp_tab = get_sfr_table()
+        sfr_interp_tab = get_sfr_table(bad_extrapolation)
     sfr = sfr_interp_tab.ev(np.log10(halos.M), np.log10(halos.redshift+1))
     sfr = add_log_normal_scatter(sfr, sigma_sfr)
     return sfr
     
-def get_sfr_table():
+def get_sfr_table(bad_extrapolation=False):
     """
-    LOAD SFR TABLE 
+    LOAD SFR TABLE from Behroozi+13a,b
     Columns are: z+1, logmass, logsfr, logstellarmass
     Intermediate processing of tabulated data      
+    with option to extrapolate to unphysical masses
     """
 
     tablepath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -129,6 +135,14 @@ def get_sfr_table():
     dat_logzp1  = np.unique(dat_logzp1)    # log(z), 1D 
     dat_logm    = np.unique(dat_logm)    # log(Mhalo), 1D        
     dat_sfr     = np.reshape(dat_sfr, (dat_logm.size, dat_logzp1.size))
+    dat_logsfr  = np.reshape(dat_logsfr, dat_sfr.shape)
+
+    # optional extrapolation to masses excluded in Behroozi+13
+    if bad_extrapolation:
+        from scipy.interpolate import SmoothBivariateSpline
+        dat_logzp1_,dat_logm_ = np.meshgrid(dat_logzp1,dat_logm)
+        badspl = SmoothBivariateSpline(dat_logzp1_[-1000<(dat_logsfr)],dat_logm_[-1000<(dat_logsfr)],dat_logsfr[-1000<(dat_logsfr)],kx=4,ky=4)
+        dat_sfr[dat_logsfr==-1000.] = 10**badspl(dat_logzp1,dat_logm).T[dat_logsfr==-1000.]
 
     # Get interpolated SFR value(s)    
     sfr_interp_tab = sp.interpolate.RectBivariateSpline(
