@@ -71,7 +71,7 @@ def params_to_mapinst(params):
 
     # map frequency dimension 
     # use linspace to ensure nmaps channels
-    map.nu_binedges = np.linspace(map.nu_i,map.nu_f,map.nmaps) 
+    map.nu_binedges = np.linspace(map.nu_i,map.nu_f,map.nmaps+1) 
     map.dnu         = np.mean(np.diff(map.nu_binedges))
     map.nu_bincents = map.nu_binedges[:-1] - map.dnu/2
     return map
