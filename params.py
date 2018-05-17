@@ -23,5 +23,5 @@ npix_y  = 256
 map_output_file = './Lco_cube_trial'
 
 ### Plot parameters 
-plot_cube = False #True
-plot_pspec = False #True
+plot_cube = True
+plot_pspec = True

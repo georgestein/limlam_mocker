@@ -1,8 +1,10 @@
 from __future__ import print_function
+from . import debug
 import time
 import datetime
 import numpy as np
 import scipy as sp
+import matplotlib.pyplot as plt
 
 class empty_table():
     """
@@ -130,3 +132,36 @@ def redshift_to_chi(z, cosmo):
     return chi_of_z(z)
 
 
+def plot_results(mapinst,k,Pk,Pk_sampleerr,params):
+    """
+    Plot central frequency map and or powerspectrum
+    """
+    if debug.verbose: print("\n\tPlotting results")
+    
+    plt.rcParams['font.size'] = 16
+    if params.plot_cube:
+        plt.figure()
+        im = plt.imshow(np.log10(mapinst.maps[:,:,params.nmaps//2]+1e-6), 
+                        extent=[-mapinst.fov_x/2,mapinst.fov_x/2,-mapinst.fov_y/2,mapinst.fov_y/2],
+                        vmin=-1,vmax=2)
+        
+        plt.colorbar(im,label=r'$log_{10}\ T_b\ [\mu K]$')
+        plt.xlabel('degrees',fontsize=16)
+        plt.ylabel('degrees',fontsize=16)
+        plt.title('simulated map at {0:.3f} GHz'.format(mapinst.nu_bincents[params.nmaps//2]),fontsize=16)
+
+    if params.plot_pspec:
+        plt.figure()
+        plt.errorbar(k,k**3*Pk/(2*np.pi**2),k**3*Pk_sampleerr/(2*np.pi**2),
+                     lw=3,capsize=0)
+        plt.gca().set_xscale('log')
+        plt.gca().set_yscale('log')
+        plt.grid(True)
+        plt.xlabel('k [1/Mpc]',fontsize=16)
+        plt.ylabel('$\\Delta^2(k)$ [$\\mu$K$^2$]',fontsize=16)
+        plt.title('simulated line power spectrum',fontsize=16)
+
+    if params.plot_cube or params.plot_pspec:
+        plt.show()
+
+    return

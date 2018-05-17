@@ -30,32 +30,8 @@ llm.save_maps(mapinst)
 k,Pk,Nmodes = llm.map_to_pspec(mapinst,cosmo)
 Pk_sampleerr = Pk/np.sqrt(Nmodes)
 
+### Plot results
+llm.plot_results(mapinst,k,Pk,Pk_sampleerr,params)
 
 llm.write_time('Finished Line Intensity Mapper')
-
-
-### Plot central frequency map
-plt.rcParams['font.size'] = 16
-if params.plot_cube:
-    plt.figure()
-    im = plt.imshow(np.log10(mapinst.maps[:,:,params.nmaps//2]+1e-6), extent=[-mapinst.fov_x/2,mapinst.fov_x/2,-mapinst.fov_y/2,mapinst.fov_y/2],vmin=-1,vmax=2)
-    plt.colorbar(im,label=r'$log_{10}\ T_b\ [\mu K]$')
-    plt.xlabel('degrees',fontsize=16)
-    plt.ylabel('degrees',fontsize=16)
-    plt.title('simulated map at {0:.3f} GHz'.format(mapinst.nu_bincents[params.nmaps//2]),fontsize=16)
-
-if params.plot_pspec:
-    plt.figure()
-    plt.errorbar(k,k**3*Pk/(2*np.pi**2),k**3*Pk_sampleerr/(2*np.pi**2),
-                    lw=3,capsize=0)
-    plt.gca().set_xscale('log')
-    plt.gca().set_yscale('log')
-    plt.grid(True)
-    plt.xlabel('k [1/Mpc]',fontsize=16)
-    plt.ylabel('$\\Delta^2(k)$ [$\\mu$K$^2$]',fontsize=16)
-    plt.title('simulated line power spectrum',fontsize=16)
-
-if params.plot_cube or params.plot_pspec:
-    plt.show()
-
 
