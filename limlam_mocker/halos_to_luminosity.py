@@ -15,6 +15,15 @@ def Mhalo_to_Lco(halos, model, coeffs):
     General function to get L_co(M_halo) given a certain model <model>
     if adding your own model follow this structure, 
     and simply specify the model to use in the parameter file
+
+    Parameters
+    ----------
+    halos : class 
+        Contains all halo information (position, redshift, etc..)
+    model : str
+        Model to use, specified in the parameter file
+    coeffs : 
+        None for default coeffs
     """
     dict = {'Li':          Mhalo_to_Lco_Li,
             'Padmanabhan': Mhalo_to_Lco_Padmanabhan}

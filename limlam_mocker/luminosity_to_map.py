@@ -8,6 +8,18 @@ def Lco_to_map(halos,map):
     """
     Converts Luminosity to brightness temperature 
     and bins into 3d intensity map data cube
+
+    Parameters
+    ----------
+    halos : class
+        Contains all halo information (position, redshift, etc..) 
+    map : class
+       contains all information about the map that the halos will be binned into
+
+    Returns
+    -------
+    maps :
+        The 3D data cube of brightness temperature
     """
     if debug.verbose: print('\n\tBinning halos into map')
 

@@ -51,7 +51,12 @@ def timeme(method):
 
 def params_to_mapinst(params):
     """
-    Adds nput parameters to be kept by the map class and gets map details
+    Adds input parameters to be kept by the map class and gets map details
+
+    Returns
+    -------
+    map : class
+       contains all information about the map that the halos will be binned into
     """ 
     map             = empty_table() # creates empty class to put map info into 
 
@@ -87,6 +92,7 @@ def params_to_mapinst(params):
     map.dnu         = (map.nu_i - map.nu_f)/(map.nmaps)
     map.nu_binedges = np.arange(map.nu_i,map.nu_f-map.dnu,-map.dnu) 
     map.nu_bincents = map.nu_binedges[:-1] - map.dnu/2
+
     return map
 
 
@@ -138,7 +144,7 @@ def plot_results(mapinst,k,Pk,Pk_sampleerr,params):
     """
     if debug.verbose: print("\n\tPlotting results")
     
-    plt.rcParams['font.size'] = 16
+    plt.rcParams['font.size'] = 14
     if params.plot_cube:
         plt.figure()
         im = plt.imshow(np.log10(mapinst.maps[:,:,params.nmaps//2]+1e-6), 
@@ -146,9 +152,9 @@ def plot_results(mapinst,k,Pk,Pk_sampleerr,params):
                         vmin=-1,vmax=2)
         
         plt.colorbar(im,label=r'$log_{10}\ T_b\ [\mu K]$')
-        plt.xlabel('degrees',fontsize=16)
-        plt.ylabel('degrees',fontsize=16)
-        plt.title('simulated map at {0:.3f} GHz'.format(mapinst.nu_bincents[params.nmaps//2]),fontsize=16)
+        plt.xlabel('degrees')
+        plt.ylabel('degrees')
+        plt.title('simulated map at {0:.3f} GHz'.format(mapinst.nu_bincents[params.nmaps//2]))
 
     if params.plot_pspec:
         plt.figure()
@@ -157,9 +163,9 @@ def plot_results(mapinst,k,Pk,Pk_sampleerr,params):
         plt.gca().set_xscale('log')
         plt.gca().set_yscale('log')
         plt.grid(True)
-        plt.xlabel('k [1/Mpc]',fontsize=16)
-        plt.ylabel('$\\Delta^2(k)$ [$\\mu$K$^2$]',fontsize=16)
-        plt.title('simulated line power spectrum',fontsize=16)
+        plt.xlabel('k [1/Mpc]')
+        plt.ylabel('$\\Delta^2(k)$ [$\\mu$K$^2$]')
+        plt.title('simulated line power spectrum')
 
     if params.plot_cube or params.plot_pspec:
         plt.show()

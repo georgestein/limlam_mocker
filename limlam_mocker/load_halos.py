@@ -7,6 +7,13 @@ from . import debug
 def load_peakpatch_catalogue(filein):
     """
     Load peak patch halo catalogue into halos class and cosmology into cosmo class
+
+    Returns
+    -------
+    halos : class
+        Contains all halo information (position, redshift, etc..)
+    cosmo : class
+        Contains all cosmology information (Omega_i, sigme_8, etc)
     """
     halos      = empty_table()            # creates empty class to put any halo info into  
     cosmo      = empty_table()            # creates empty class to put any cosmology info into  

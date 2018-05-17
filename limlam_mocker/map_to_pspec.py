@@ -7,6 +7,22 @@ from .tools import *
 def map_to_pspec(map,cosmo):
     """
     Calculates power spectrum from 3D temperature cube
+
+    Parameters
+    ----------
+    halos : class
+        Contains all halo information (position, redshift, etc..)
+    cosmo : class
+        Contains all cosmology information (Omega_i, sigme_8, etc)   
+
+    Returns
+    -------
+    k : `~numpy.ndarray`
+        Wavevectors
+    Pk : `~numpy.ndarray`
+        Power at each k value
+    nmodes : `~numpy.ndarray`
+        Number of modes in each k bin
     """ 
     if debug.verbose: print("\n\tCalculating power spectrum")
 
