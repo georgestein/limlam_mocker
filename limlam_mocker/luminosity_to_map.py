@@ -6,7 +6,7 @@ from . import debug
 @timeme
 def Lco_to_map(halos,map):
     """
-    Converts Luminosity to brightness temperature
+    Converts Luminosity to brightness temperature 
     and bins into 3d intensity map data cube
     """
     if debug.verbose: print('\n\tBinning halos into map')
@@ -29,9 +29,9 @@ def Lco_to_map(halos,map):
 
 
 def T_line(halos, map):
-    """ 
-     The line Temperature in Rayleigh-Jeans limit
-        T_line = c^2/2/kb/nuobs^2 * I_line
+    """
+    The line Temperature in Rayleigh-Jeans limit
+    T_line = c^2/2/kb/nuobs^2 * I_line
 
      where the Intensity I_line = L_line/4/pi/D_L^2/dnu
         D_L = D_p*(1+z), I_line units of L_sun/Mpc^2/Hz
@@ -40,7 +40,6 @@ def T_line(halos, map):
         = [ 3.48e26 W/Mpc^2/GHz ] * [ 6.50966e21 s^2/K/kg ] 
         = 2.63083e-6 K = 2.63083 muK 
     """ 
-
     convfac = 2.63083
     Tco     = 1./2*convfac/halos.nu**2 * halos.Lco/4/np.pi/halos.chi**2/(1+halos.redshift)**2/map.dnu/map.Ompix
 
@@ -48,6 +47,7 @@ def T_line(halos, map):
 
 @timeme
 def save_maps(map):
+    """save 3D data cube in .npz format."""
     if debug.verbose: print('\n\tSaving Map Data Cube to\n\t\t',map.output_file)
     np.savez(map.output_file,
              fov_x=map.fov_x, fov_y=map.fov_y,

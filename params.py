@@ -2,7 +2,7 @@
 # and map parameters
 
 ### Lco(M, z, ...) model
-model   = 'Li' #'Padmanabhan'
+model   = 'Li' # models includes are "Li" and 'Padmanabhan'
 coeffs  = None # specify None for default coeffs
 
 ### Halo parameters
@@ -23,5 +23,5 @@ npix_y  = 256
 map_output_file = './Lco_cube_trial'
 
 ### Plot parameters 
-plot_cube = True
-plot_pspec = True
+plot_cube = False #True
+plot_pspec = False #True

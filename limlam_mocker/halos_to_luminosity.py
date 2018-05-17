@@ -83,7 +83,7 @@ def Mhalo_to_Lco_Padmanabhan(halos, coeffs):
 
 def get_sfr_table():
     """
-    LOAD SFR TABLE 
+    Load SFR Table 
     Columns are: z+1, logmass, logsfr, logstellarmass
     Intermediate processing of tabulated data      
     """
@@ -108,7 +108,8 @@ def get_sfr_table():
 
 def add_log_normal_scatter(data,dex):
     """
-    Return array x, randomly scattered by a log-normal distribution with sigma=dexscatter. [via @tonyyli - https://github.com/dongwooc/imapper2]
+    Return array x, randomly scattered by a log-normal distribution with sigma=dexscatter. 
+    [via @tonyyli - https://github.com/dongwooc/imapper2]
     Note: scatter maintains mean in linear space (not log space).
     """
     if (dex<=0):

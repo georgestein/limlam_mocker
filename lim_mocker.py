@@ -40,9 +40,9 @@ if params.plot_cube:
     plt.figure()
     im = plt.imshow(np.log10(mapinst.maps[:,:,params.nmaps//2]+1e-6), extent=[-mapinst.fov_x/2,mapinst.fov_x/2,-mapinst.fov_y/2,mapinst.fov_y/2],vmin=-1,vmax=2)
     plt.colorbar(im,label=r'$log_{10}\ T_b\ [\mu K]$')
-    plt.xlabel('degrees',fontsize=20)
-    plt.ylabel('degrees',fontsize=20)
-    plt.title('simulated map at {0:.3f} GHz'.format(mapinst.nu_bincents[params.nmaps//2]),fontsize=24)
+    plt.xlabel('degrees',fontsize=16)
+    plt.ylabel('degrees',fontsize=16)
+    plt.title('simulated map at {0:.3f} GHz'.format(mapinst.nu_bincents[params.nmaps//2]),fontsize=16)
 
 if params.plot_pspec:
     plt.figure()
@@ -51,9 +51,9 @@ if params.plot_pspec:
     plt.gca().set_xscale('log')
     plt.gca().set_yscale('log')
     plt.grid(True)
-    plt.xlabel('k [1/Mpc]',fontsize=18)
-    plt.ylabel('$\\Delta^2(k)$ [$\\mu$K$^2$]',fontsize=18)
-    plt.title('simulated line power spectrum',fontsize=24)
+    plt.xlabel('k [1/Mpc]',fontsize=16)
+    plt.ylabel('$\\Delta^2(k)$ [$\\mu$K$^2$]',fontsize=16)
+    plt.title('simulated line power spectrum',fontsize=16)
 
 if params.plot_cube or params.plot_pspec:
     plt.show()
