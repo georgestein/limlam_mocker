@@ -11,7 +11,11 @@ sfr_interp_tab = None
 
 @timeme
 def Mhalo_to_Lco(halos, model, coeffs):
-
+    """
+    General function to get L_co(M_halo) given a certain model <model>
+    if adding your own model follow this structure, 
+    and simply specify the model to use in the parameter file
+    """
     dict = {'Li':          Mhalo_to_Lco_Li,
             'Padmanabhan': Mhalo_to_Lco_Padmanabhan}
 

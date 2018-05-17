@@ -5,7 +5,9 @@ from . import debug
 
 @timeme
 def load_peakpatch_catalogue(filein):
-    """Load peak patch halo catalogue into halos class and cosmology into cosmo class."""
+    """
+    Load peak patch halo catalogue into halos class and cosmology into cosmo class
+    """
     halos      = empty_table()            # creates empty class to put any halo info into  
     cosmo      = empty_table()            # creates empty class to put any cosmology info into  
 
@@ -50,11 +52,13 @@ def load_peakpatch_catalogue(filein):
 
 @timeme
 def cull_peakpatch_catalogue(halos, min_mass, mapinst):
-    """crops the halo catalogue to only include desired halos."""
+    """
+    crops the halo catalogue to only include desired halos
+    """
     dm = [(halos.M > min_mass) * (halos.redshift >= mapinst.z_i)
-                                * (np.abs(halos.ra) <= mapinst.fov_x/2)
-                                * (np.abs(halos.dec) <= mapinst.fov_y/2)
-                                * (halos.redshift <= mapinst.z_f)]
+                               * (np.abs(halos.ra) <= mapinst.fov_x/2)
+                               * (np.abs(halos.dec) <= mapinst.fov_y/2)
+                               * (halos.redshift <= mapinst.z_f)]
 
     for i in dir(halos):
         if i[0]=='_': continue

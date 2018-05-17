@@ -47,7 +47,9 @@ def T_line(halos, map):
 
 @timeme
 def save_maps(map):
-    """save 3D data cube in .npz format."""
+    """
+    save 3D data cube in .npz format, including map header information
+    """
     if debug.verbose: print('\n\tSaving Map Data Cube to\n\t\t',map.output_file)
     np.savez(map.output_file,
              fov_x=map.fov_x, fov_y=map.fov_y,

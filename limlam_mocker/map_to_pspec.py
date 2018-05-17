@@ -5,16 +5,18 @@ from .tools import *
 
 @timeme
 def map_to_pspec(map,cosmo):
-    """Calculates power spectrum from 3D temperature cube.""" 
+    """
+    Calculates power spectrum from 3D temperature cube
+    """ 
     if debug.verbose: print("\n\tCalculating power spectrum")
 
     x,y,z = map.pix_binedges_x, map.pix_binedges_y, map.nu_binedges
     t     = map.maps
 
     zco   = redshift_to_chi(map.nu_rest/z-1,cosmo)
-
     # assume comoving transverse distance = comoving distance
     # (i.e. no curvature)
+
     avg_ctd = np.mean(zco) 
     xco     = x/(180)*np.pi*avg_ctd
     yco     = y/(180)*np.pi*avg_ctd
