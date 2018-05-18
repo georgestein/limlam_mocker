@@ -2,8 +2,7 @@ Limlam Mocker: A package for Line Intensity Mocks
 =================================================
 
 Limlam mocker is a barebones code to create line intensity maps from a given halo catalogue. 
-It only requires `NumPy <http://www.numpy.org/>`_ and `SciPy <http://www.scipy.org/>`_  
-- no special astronomy packages.
+It only requires `NumPy <http://www.numpy.org/>`_ and `SciPy <http://www.scipy.org/>`_ - no special astronomy packages.
 
 To Run
 ------
