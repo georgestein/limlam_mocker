@@ -19,6 +19,7 @@ A small sample halo catalogue is included, but many more of larger sizes are ava
 the basic workflow
 ------------------
 The example script provided in `lim_mocker.py` shows the basic workflow:
+
 - `import params` initialises the parameters for the mock map.
 - `load_peakpatch_catalogue` loads the halos from the lightcone specified.
 - `cull_peakpatch_catalogue` implements a mass cutoff.
