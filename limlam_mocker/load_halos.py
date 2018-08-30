@@ -77,4 +77,15 @@ def cull_peakpatch_catalogue(halos, min_mass, mapinst):
 
     if debug.verbose: print('\n\t%d halos remain after mass/map cut' % halos.nhalo)
 
+    # sort halos by mass, so fluctuations in luminosity 
+    # are the same with any given mass cut
+    dm = [np.argsort(halos.M)[::-1]]
+
+    for i in dir(halos):
+        if i[0]=='_': continue
+        try:
+            setattr(halos,i,getattr(halos,i)[dm])
+        except TypeError:
+            pass
+
     return halos

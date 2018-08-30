@@ -54,7 +54,7 @@ def Mhalo_to_Lco_Li(halos, coeffs):
     if sfr_interp_tab is None:
         sfr_interp_tab = get_sfr_table()
     sfr            = sfr_interp_tab.ev(np.log10(halos.M), np.log10(halos.redshift+1))
-    sfr            = add_log_normal_scatter(sfr, sigma_sfr)
+    sfr            = add_log_normal_scatter(sfr, sigma_sfr, 1)
 
     # infrared luminosity
     lir      = sfr * 1e10 / delta_mf
@@ -63,7 +63,7 @@ def Mhalo_to_Lco_Li(halos, coeffs):
     Lcop     = lir**alphainv * 10**(-beta * alphainv)
     # Lco in L_sun
     Lco      =  4.9e-5 * Lcop
-    Lco      = add_log_normal_scatter(Lco, sigma_lco)
+    Lco      = add_log_normal_scatter(Lco, sigma_lco, 2)
 
     if debug.verbose: print('\n\tMhalo to Lco calculated')
 
@@ -119,7 +119,7 @@ def get_sfr_table():
     return sfr_interp_tab
 
 
-def add_log_normal_scatter(data,dex):
+def add_log_normal_scatter(data,dex,seed):
     """
     Return array x, randomly scattered by a log-normal distribution with sigma=dexscatter. 
     [via @tonyyli - https://github.com/dongwooc/imapper2]
@@ -131,6 +131,9 @@ def add_log_normal_scatter(data,dex):
     sigma       = dex * 2.302585 # Stdev in log space (DIFFERENT from stdev in linear space), note: ln(10)=2.302585
     mu          = -0.5*sigma**2
 
+    # Set standard seed so changing minimum mass cut 
+    # does not change the high mass halos
+    np.random.seed(seed*13579)
     randscaling = np.random.lognormal(mu, sigma, data.shape)
     xscattered  = np.where(data > 0, data*randscaling, data)
 
