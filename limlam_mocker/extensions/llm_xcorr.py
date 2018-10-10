@@ -38,7 +38,7 @@ def halos_to_hitmap(halos,mapinst,weights=None):
     return _ra_dec_nu_to_hitmap(halos.ra, halos.dec, halos.nu, mapinst,
                                     weights=weights)
 
-def map_to_xspec(mapinst,redshift_to_chi=None):
+def map_to_xspec(mapinst,Pkvec=False):
     t = mapinst.maps
     hit = mapinst.hit
     Pk_3D = mapinst.fftsq_to_Pk*np.real(
@@ -52,9 +52,12 @@ def map_to_xspec(mapinst,redshift_to_chi=None):
     else:
         nmodes = np.histogram(kgrid[kgrid>0],bins=kbins)[0]
     Pk = Pk_nmodes/nmodes
-    return k,Pk,nmodes
+    if Pkvec:
+        return k,Pk,nmodes,Pk_3D
+    else:
+        return k,Pk,nmodes
 
-def map_to_linespec(mapinst):
+def map_to_linespec(mapinst,Pkvec=False):
     t = mapinst.maps
     Pk_3D = mapinst.fftsq_to_Pk*np.abs(np.fft.rfftn(t))**2
     k = mapinst.k
@@ -66,9 +69,12 @@ def map_to_linespec(mapinst):
     else:
         nmodes = np.histogram(kgrid[kgrid>0],bins=kbins)[0]
     Pk = Pk_nmodes/nmodes
-    return k,Pk,nmodes
+    if Pkvec:
+        return k,Pk,nmodes,Pk_3D
+    else:
+        return k,Pk,nmodes
 
-def map_to_galspec(mapinst,redshift_to_chi=None):
+def map_to_galspec(mapinst,Pkvec=False):
     hit = mapinst.hit
     Pk_3D = mapinst.fftsq_to_Pk*np.abs(np.fft.rfftn(hit))**2
     k = mapinst.k
@@ -80,4 +86,7 @@ def map_to_galspec(mapinst,redshift_to_chi=None):
     else:
         nmodes = np.histogram(kgrid[kgrid>0],bins=kbins)[0]
     Pk = Pk_nmodes/nmodes
-    return k,Pk,nmodes
+    if Pkvec:
+        return k,Pk,nmodes,Pk_3D
+    else:
+        return k,Pk,nmodes

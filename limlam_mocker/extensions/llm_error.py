@@ -1,6 +1,6 @@
 import numpy as np
 
-def pspec_err_helper(mapinst,Tsys,Nfeeds,tobs,fwhm,cosmo):
+def pspec_err_helper(mapinst,Tsys,Nfeeds,tobs,fwhm,cosmo,Wbvec=False):
     # Tsys in K; tobs in sec
     # Oobs in sr; fwhm, dpix in rad
     # dnu (channel BW), Dnu (total BW), nu_rest all in GHz
@@ -16,7 +16,10 @@ def pspec_err_helper(mapinst,Tsys,Nfeeds,tobs,fwhm,cosmo):
     W_integrand = np.exp(-kperpsq*dx_fwhm**2)
     kbins, kgrid = mapinst.kbins, mapinst.kgrid
     Wbeam = np.histogram(kgrid[kgrid>0],bins=kbins,weights=W_integrand[kgrid>0])[0]/mapinst.Nmodes
-    return Pn,Wbeam
+    if Wbvec:
+        return Pn,Wbeam,W_integrand
+    else:
+        return Pn,Wbeam
 
 def snr_linespec(Pk,Pn,Nmodes,W):
     return np.sqrt(np.sum((Pk/(Pk+Pn)*np.sqrt(Nmodes)*W)**2))
