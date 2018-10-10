@@ -39,6 +39,8 @@ add it to halos_to_luminosity.py, following the ones already there eg:
         >>> def Mhalo_to_Lco_Li(halos, scatter):
         >>>        ...
 
+For testing, you could also make use of the 'arbitrary' model, but this is strongly discouraged, and adding new prescriptions to halos_to_luminosity.py is strongly encouraged.
+
 To add your own halo catalogue
 ------------------------------
 use the template in load_halos.py
@@ -48,6 +50,13 @@ Advanced usage: using `limlam_mocker` directly in your own code
 This repo is a complete program in itself, designed so that you can painlessly run `lim_mocker.py` and not have to worry about the guts. If you want to use code other than `lim_mocker.py` with this library, the `limlam_mocker` folder inside this repository will function as a self-contained Python package.
 
 Depending on the OS and the Python version, what may work is to simply place this folder in your local site-packages directory or create a symlink there. So if the contents of e.g. `~/.local/lib/python3.5/site-packages/limlam_mocker` (the local site-packages directory for Python 3.5 in Linux) are equal to the contents of the `limlam_mocker` folder in this repo (not the root contents of this repo!), you should be able to take advantage of `limlam_mocker` functions from any Python script on your computer, regardless of where it is placed.
+
+Extended usage: using modules from `limlam_mocker.extensions` in your code
+--------------------------------------------------------------------------
+The basic `limlam_mocker` module allows for calculation of line-intensity auto-correlation spectra. To work with uncertainties on this power spectrum or scenarios like cross-correlation with galaxy surveys (see arXiv:1809.04550), you can also do this:
+        >>> from limlam_mocker.extensions import llm_xcorr as llmx
+        >>> from limlam_mocker.extensions import llm_error as llme
+`llm_xcorr` provides an extended version of the default `map_to_pspec.py` code, reducing redundant definitions of k-space parameters and allowing calculations of auto and cross spectra. `llm_error` automatically allows for calculation of noise power spectra for heterodyne receivers and all-k signal-to-noise for auto and cross spectra. Documentation on both is currently sparse, but should be improved in future.
 
 This code was written by George Stein    - gstein@cita.utoronto.ca
     with many additions by Dongwoo Chung - dongwooc@stanford.edu
