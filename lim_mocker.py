@@ -34,4 +34,3 @@ Pk_sampleerr = Pk/np.sqrt(Nmodes)
 llm.plot_results(mapinst,k,Pk,Pk_sampleerr,params)
 
 llm.write_time('Finished Line Intensity Mapper')
-
