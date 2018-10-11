@@ -66,6 +66,4 @@ A version with many more options and functions (useful power spectrum calculatio
 License
 -------
 
-Baseband is licensed under the GNU General Public License v3.0 - see the
-``LICENSE`` file.
-
+limlam_mocker is licensed under the GNU General Public License v3.0 
