@@ -164,7 +164,7 @@ def get_sfr_table(bad_extrapolation=False):
     return sfr_interp_tab
 
 
-def add_log_normal_scatter(data,dex,seed):
+def add_log_normal_scatter(data,dex,seed=None):
     """
     Return array x, randomly scattered by a log-normal distribution with sigma=dexscatter. 
     [via @tonyyli - https://github.com/dongwooc/imapper2]
@@ -178,7 +178,7 @@ def add_log_normal_scatter(data,dex,seed):
 
     # Set standard seed so changing minimum mass cut 
     # does not change the high mass halos
-    np.random.seed(seed*13579)
+    if seed is not None: np.random.seed(seed*13579)
     randscaling = np.random.lognormal(mu, sigma, data.shape)
     xscattered  = np.where(data > 0, data*randscaling, data)
 
