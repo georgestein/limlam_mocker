@@ -126,7 +126,7 @@ def Mhalo_to_sfr_Behroozi(halos, sigma_sfr, bad_extrapolation=False):
     if sfr_interp_tab is None:
         sfr_interp_tab = get_sfr_table(bad_extrapolation)
     sfr = sfr_interp_tab.ev(np.log10(halos.M), np.log10(halos.redshift+1))
-    sfr = add_log_normal_scatter(sfr, sigma_sfr)
+    sfr = add_log_normal_scatter(sfr, sigma_sfr, 1)
     return sfr
     
 def get_sfr_table(bad_extrapolation=False):
